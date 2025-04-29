@@ -1,6 +1,28 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# About 
 
-## Getting Started
+“不闻不若闻之，
+闻之不若见之，
+见之不若知之，
+知之不若行之；
+学之于行之而止矣。”
+
+— 荀子
+
+*"Not hearing is unlike hearing, 
+hearing is unlike seeing, 
+seeing is unlike knowing,
+knowing is unlike doing;
+learning is only achieved through doing."
+
+\-Xunzi*
+
+Gong Li Worksheets (龚李练习册) serves to teach people written Chinese through continuous learning and repetition. Learners can use this app to create and download printable worksheets to practice and improve their learning. 
+
+DISCLAIMER: 
+
+# Tech Stack 
+
+# How to Run
 
 First, run the development server:
 
@@ -20,17 +42,32 @@ You can start editing the page by modifying `app/page.js`. The page auto-updates
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+# Features
 
-To learn more about Next.js, take a look at the following resources:
+*
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# How to Report Issues
+Email me at amaengo@protonmail.com if you find any bugs in the program or have any issues running it.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# In Loving Memory
 
-## Deploy on Vercel
+這個項目獻給我對長輩的記憶。他們的善良、遺產和與中國文化的聯繫激發了這個工具的創作。願這項工作作為對你們故事的微小致敬，為他人帶來學習和喜悅。
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+致以最深的敬意，
+龔語智 (thedevarchive)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+这个项目献给我对长辈的记忆。他们的善良、遗产和与中国文化的联系激发了这个工具的创作。愿这项工作作为对你们故事的微小致敬，为他人带来学习和喜悦。
+
+致以最深的敬意，
+龚语智 (thedevarchive)
+
+---
+
+This project is dedicated to the memory of my elders. Their kindness, legacy and connection to their Chinese heritage inspired the creation of this tool. May this work bring learning and joy to others as a small tribute to your story.
+
+With deepest respect, 
+Yuzhi\* Gong (thedevarchive)
+
+\* pronounced like "yoo-jer", but raise the pitch at the end of "yoo" (should sound like something in between you, ooh and eeh)
