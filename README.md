@@ -12,9 +12,9 @@
 hearing is unlike seeing, 
 seeing is unlike knowing,
 knowing is unlike doing;
-learning is only achieved through doing."
+learning is only achieved through doing."*
 
-\-Xunzi*
+*\-Xunzi*
 
 Gong Li Worksheets (龚李练习册) serves to teach people written Chinese through continuous learning and repetition. Learners can use this app to create and download printable worksheets to practice and improve their learning. 
 
