@@ -56,6 +56,7 @@ Email me at amaengo@protonmail.com if you find any bugs in the program or have a
 這個項目獻給我對長輩的記憶。他們的善良、遺產和與中國文化的聯繫激發了這個工具的創作。願這項工作作為對你們故事的微小致敬，為他人帶來學習和喜悅。
 
 致以最深的敬意，
+
 龔語智 (thedevarchive)
 
 ---
@@ -63,6 +64,7 @@ Email me at amaengo@protonmail.com if you find any bugs in the program or have a
 这个项目献给我对长辈的记忆。他们的善良、遗产和与中国文化的联系激发了这个工具的创作。愿这项工作作为对你们故事的微小致敬，为他人带来学习和喜悦。
 
 致以最深的敬意，
+
 龚语智 (thedevarchive)
 
 ---
@@ -70,6 +72,7 @@ Email me at amaengo@protonmail.com if you find any bugs in the program or have a
 This project is dedicated to the memory of my elders. Their kindness, legacy and connection to their Chinese heritage inspired the creation of this tool. May this work bring learning and joy to others as a small tribute to your story.
 
 With deepest respect, 
+
 Yuzhi\* Gong (thedevarchive)
 
 \* pronounced like "yoo-jer", but raise the pitch at the end of "yoo" (should sound like something in between you, ooh and eeh)
