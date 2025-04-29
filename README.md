@@ -16,9 +16,11 @@ learning is only achieved through doing."*
 
 *\-Xunzi*
 
-Gong Li Worksheets (龚李练习册) serves to teach people written Chinese through continuous learning and repetition. Learners can use this app to create and download printable worksheets to practice and improve their learning. 
+Gong Li Worksheets (龚李练习册) serves to teach people Mandarin Chinese through repetitive and continuous learning. Learners can use this app to create and download printable worksheets to practice and improve their learning. 
 
-DISCLAIMER: 
+## DISCLAIMER
+
+This app does not guarantee fluency in Chinese. It is designed to support reading and writing practice in Mandarin Chinese. Learners are encouraged to supplement this tool with other listening, speaking and grammar resources for a more complete language learning experience. Additionally, it is highly encouraged to modify worksheets to support the other aspects of the language (e.g. reading the sentences aloud or writing Pinyin next to each character). 
 
 # Tech Stack 
 
