@@ -51,6 +51,8 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 # How to Report Issues
 Email me at amaengo@protonmail.com if you find any bugs in the program or have any issues running it.
 
+---
+
 ### In Loving Memory
 
 這個項目獻給我對長輩的記憶。他們的善良、遺產和與中國文化的聯繫激發了這個工具的創作。願這項工作作為對你們故事的微小致敬，為他人帶來學習和喜悅。
