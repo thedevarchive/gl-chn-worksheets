@@ -34,7 +34,7 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <div className="flex flex-col items-center justify-center p-4 bg-red-200 flex-1">
+      <div className="flex flex-col items-center justify-center p-4 bg-violet-200 flex-1">
         <div className="flex flex-col items-center bg-white p-8 rounded-2xl shadow-md w-full max-w-md mt-12">
           <h1 className="text-2xl font-bold mb-6 text-center">Generate Worksheet</h1>
 
@@ -46,9 +46,9 @@ export default function Home() {
               onChange={(e) => setLevel(e.target.value)}
               className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="A">Level A: Introduction and Phrases I</option>
-              <option value="B">Level B: Introduction and Phrases II</option>
-              <option value="C">Level C: Food and Drink Preferences</option>
+              <option value="1">Introduction and Phrases I</option>
+              <option value="2">Introduction and Phrases II</option>
+              <option value="3">Food and Drink Preferences</option>
             </select>
           </section>
 
