@@ -1,15 +1,79 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-  const [level, setLevel] = useState("A");
-  const [pages, setPages] = useState(1);
+  const router = useRouter(); // Initialise useRouter
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Selected level:", level);
+  const [lessonArr, setLessonArr] = useState([]);
+  const [selectedLesson, setSelectedLesson] = useState("1");
+  const [pages, setPages] = useState(0);
+
+  //boolean value states for question types 
+  const [matchPinyin, setMatchPinyin] = useState(false);
+  const [matchMeaning, setMatchMeaning] = useState(false);
+  const [fillBlank, setFillBlank] = useState(false);
+  const [translateChn, setTranslateChn] = useState(false);
+
+  const [selectedFormat, setSelectedFormat] = useState("");
+
+  const API_URL = "http://localhost:9080";
+
+  useEffect(() => {
+    fetch(`${API_URL}/lessons`, {
+      method: "GET",
+      headers: {
+        "accept": "application/json",
+        "Content-Type": "application/json"
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setLessonArr(data.lessons))
+      .catch((err) => console.error(err));
+  }, [router]);
+
+  const handleGenerate = () => {
+    console.log("Selected level:", selectedLesson);
     console.log("Number of pages:", pages);
+    console.log("Match Pinyin?", matchPinyin);
+    console.log("Match Meaning?", matchMeaning);
+    console.log("FITB?", fillBlank);
+    console.log("TL Chinese?", translateChn);
+    console.log("Selected Format:", selectedFormat);
+
+    fetch(`${API_URL}/worksheets/${selectedLesson}`, {
+      method: "GET",
+      headers: {
+        "accept": "application/json",
+        "Content-Type": "application/json",
+        pages: String(pages),
+        match_pinyin: String(matchPinyin),
+        match_meaning: String(matchMeaning),
+        fill_blank: String(fillBlank),
+        translate_chn: String(translateChn),
+        question_format: selectedFormat
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return res.blob(); // Convert the response to a Blob
+      })
+      .then((pdfBlob) => {
+        // pdfBlob is a Blob; you can handle it as a PDF
+        const pdfUrl = URL.createObjectURL(pdfBlob);
+    
+        // Open the PDF in a new window or tab
+        const newWindow = window.open(pdfUrl, '_blank'); // '_blank' ensures it opens in a new tab/window
+        if (newWindow) {
+          newWindow.focus(); // Brings the new window to focus
+        } else {
+          console.error("Failed to open new window. Allow popups for this website to view the worksheet.");
+        }
+      })
+      .catch((err) => console.error(err));
   };
 
   return (
@@ -34,21 +98,23 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <div className="flex flex-col items-center justify-center p-4 bg-violet-200 flex-1">
+      <div className="flex flex-col items-center p-4 bg-violet-200 flex-1">
         <div className="flex flex-col items-center bg-white p-8 rounded-2xl shadow-md w-full max-w-md mt-12">
           <h1 className="text-2xl font-bold mb-6 text-center">Generate Worksheet</h1>
 
           {/* Level selection */}
           <section className="flex flex-col items-center mb-6">
-            <h2 className="text-xl font-semibold mb-2">Select Level</h2>
+            <h2 className="text-xl font-semibold mb-2">Select Lesson</h2>
             <select
-              value={level}
-              onChange={(e) => setLevel(e.target.value)}
+              value={selectedLesson}
+              onChange={(e) => setSelectedLesson(e.target.value)}
               className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="1">Introduction and Phrases I</option>
-              <option value="2">Introduction and Phrases II</option>
-              <option value="3">Food and Drink Preferences</option>
+              {
+                lessonArr.map((lesson) => (
+                  <option key={lesson.id} value={lesson.id}>{lesson.title}</option>
+                ))
+              }
             </select>
           </section>
 
@@ -57,22 +123,62 @@ export default function Home() {
             <h2 className="text-xl font-semibold mb-2">Select Number of Pages</h2>
             <div className="flex gap-4">
               <label className="flex items-center space-x-2">
-                <input type="radio" name="pages" value="4" className="accent-yellow-500" />
+                <input type="radio" name="pages" onChange={() => setPages(4)} className="accent-yellow-500" />
                 <span>4 Pages</span>
               </label>
               <label className="flex items-center space-x-2">
-                <input type="radio" name="pages" value="5" className="accent-yellow-500" />
+                <input type="radio" name="pages" onChange={() => setPages(5)} className="accent-yellow-500" />
                 <span>5 Pages</span>
               </label>
               <label className="flex items-center space-x-2">
-                <input type="radio" name="pages" value="6" className="accent-yellow-500" />
+                <input type="radio" name="pages" onChange={() => setPages(6)} className="accent-yellow-500" />
                 <span>6 Pages</span>
               </label>
             </div>
           </section>
 
+          <section className="flex flex-col items-center mb-6">
+            <h2 className="text-xl font-semibold mb-2">Select Question Types</h2>
+            <div className="flex flex-col justify-center gap-2">
+              <label className="flex items-center space-x-2">
+                <input type="checkbox" name="qType" onChange={() => setMatchPinyin(!matchPinyin)} className="accent-yellow-500" />
+                <span>Match Pinyin to Word</span>
+              </label>
+              <label className="flex items-center space-x-2">
+                <input type="checkbox" name="qType" onChange={() => setMatchMeaning(!matchMeaning)} className="accent-yellow-500" />
+                <span>Match Meaning to Word</span>
+              </label>
+              <label className="flex items-center space-x-2">
+                <input type="checkbox" name="qType" onChange={() => setFillBlank(!fillBlank)} className="accent-yellow-500" />
+                <span>Fill in the Blank</span>
+              </label>
+              <label className="flex items-center space-x-2">
+                <input type="checkbox" name="qType" onChange={() => setTranslateChn(!translateChn)} className="accent-yellow-500" />
+                <span>Translate to Chinese</span>
+              </label>
+            </div>
+          </section>
+
+          <section className="flex flex-col items-center mb-6">
+            <h2 className="text-xl font-semibold mb-2">Select Question Format</h2>
+            <div className="flex gap-4">
+              <label className="flex items-center space-x-2">
+                <input type="radio" name="qFormat" value="MC" checked={selectedFormat === "MC"} onChange={(e) => setSelectedFormat(e.target.value)} className="accent-yellow-500" />
+                <span>Multiple Choice</span>
+              </label>
+              <label className="flex items-center space-x-2">
+                <input type="radio" name="qFormat" value="WR" checked={selectedFormat === "WR"} onChange={(e) => setSelectedFormat(e.target.value)} className="accent-yellow-500" />
+                <span>Write Answer</span>
+              </label>
+              <label className="flex items-center space-x-2">
+                <input type="radio" name="qFormat" value="MW" checked={selectedFormat === "MW"} onChange={(e) => setSelectedFormat(e.target.value)} className="accent-yellow-500" />
+                <span>Both</span>
+              </label>
+            </div>
+          </section>
+
           {/* Submit button */}
-          <button className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+          <button onClick={() => handleGenerate()} className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
             Generate
           </button>
         </div>
