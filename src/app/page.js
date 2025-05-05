@@ -8,7 +8,7 @@ export default function Home() {
 
   const [lessonArr, setLessonArr] = useState([]);
   const [selectedLesson, setSelectedLesson] = useState("1");
-  const [pages, setPages] = useState(0);
+  const [questions, setQuestions] = useState(0);
 
   //boolean value states for question types 
   const [matchPinyin, setMatchPinyin] = useState(false);
@@ -35,7 +35,7 @@ export default function Home() {
 
   const handleGenerate = () => {
     console.log("Selected level:", selectedLesson);
-    console.log("Number of pages:", pages);
+    console.log("Number of questions:", questions);
     console.log("Match Pinyin?", matchPinyin);
     console.log("Match Meaning?", matchMeaning);
     console.log("FITB?", fillBlank);
@@ -47,7 +47,7 @@ export default function Home() {
       headers: {
         "accept": "application/json",
         "Content-Type": "application/json",
-        pages: String(pages),
+        questions: String(questions),
         match_pinyin: String(matchPinyin),
         match_meaning: String(matchMeaning),
         fill_blank: String(fillBlank),
@@ -118,21 +118,21 @@ export default function Home() {
             </select>
           </section>
 
-          {/* Number of pages */}
+          {/* Number of questions */}
           <section className="flex flex-col items-center mb-6">
-            <h2 className="text-xl font-semibold mb-2">Select Number of Pages</h2>
+            <h2 className="text-xl font-semibold mb-2">Select Number of Questions</h2>
             <div className="flex gap-4">
               <label className="flex items-center space-x-2">
-                <input type="radio" name="pages" onChange={() => setPages(4)} className="accent-yellow-500" />
-                <span>4 Pages</span>
+                <input type="radio" name="questions" onChange={() => setQuestions(40)} className="accent-yellow-500" />
+                <span>40</span>
               </label>
               <label className="flex items-center space-x-2">
-                <input type="radio" name="pages" onChange={() => setPages(5)} className="accent-yellow-500" />
-                <span>5 Pages</span>
+                <input type="radio" name="questions" onChange={() => setQuestions(50)} className="accent-yellow-500" />
+                <span>50</span>
               </label>
               <label className="flex items-center space-x-2">
-                <input type="radio" name="pages" onChange={() => setPages(6)} className="accent-yellow-500" />
-                <span>6 Pages</span>
+                <input type="radio" name="questions" onChange={() => setQuestions(60)} className="accent-yellow-500" />
+                <span>60</span>
               </label>
             </div>
           </section>
