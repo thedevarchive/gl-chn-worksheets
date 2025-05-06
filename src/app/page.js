@@ -9,6 +9,7 @@ export default function Home() {
   const [lessonArr, setLessonArr] = useState([]);
   const [selectedLesson, setSelectedLesson] = useState("1");
   const [questions, setQuestions] = useState(0);
+  //const [isSimplified, setIsSimplified] = useState(true); 
 
   //boolean value states for question types 
   const [matchPinyin, setMatchPinyin] = useState(false);
@@ -64,6 +65,7 @@ export default function Home() {
       .then((pdfBlob) => {
         // pdfBlob is a Blob; you can handle it as a PDF
         const pdfUrl = URL.createObjectURL(pdfBlob);
+        console.log(pdfBlob);
     
         // Open the PDF in a new window or tab
         const newWindow = window.open(pdfUrl, '_blank'); // '_blank' ensures it opens in a new tab/window
