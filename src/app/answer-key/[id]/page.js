@@ -89,8 +89,8 @@ const AnswerKey = () => {
                 </div>
 
                 <h3 className="text-2xl font-bold text-center">Vocabulary</h3>
-                <div className="flex flex-col p-8 md:gap-8 lg:flex-row lg:gap-30">
-                    <div className="flex flex-col gap-4 p-10 rounded-2xl min-w-sm max-w-sm bg-gradient-to-b from-violet-400 to-violet-100">
+                <div className="flex flex-col gap-y-4 md:items-center lg:items-stretch py-8 lg:p-8 md:gap-8 lg:flex-row lg:gap-30">
+                    <div className="flex flex-col gap-4 p-10 rounded-2xl w-90 lg:min-w-sm lg:max-w-sm bg-gradient-to-b from-violet-400 to-violet-100">
                         {
                             columns?.column1?.map((item, index) => (
                                 <div key={index}>
@@ -99,7 +99,7 @@ const AnswerKey = () => {
                             ))
                         }
                     </div>
-                    <div className="flex flex-col gap-4 p-10 rounded-2xl min-w-sm max-w-sm bg-gradient-to-b from-violet-400 to-violet-100">
+                    <div className="flex flex-col gap-4 p-10 rounded-2xl w-90 lg:min-w-sm lg:max-w-sm bg-gradient-to-b from-violet-400 to-violet-100">
                         {
                             columns?.column2?.map((item, index) => (
                                 <div key={index}>
@@ -111,11 +111,11 @@ const AnswerKey = () => {
                 </div>
 
                 <h3 className="text-2xl font-bold text-center">Fill in the Blanks</h3>
-                <div className="flex flex-wrap justify-center max-w-5xl gap-12 mx-auto">
+                <div className="flex flex-wrap justify-center max-w-5xl lg:gap-12 mx-auto">
                     {
                         fitb?.map((item, index) => (
-                            <div key={index} className="text-2xl w-[30%] px-6 py-4 max-w-sm">
-                                <div className="py-2">
+                            <div key={index} className="w-full text-2xl px-6 py-4 lg:w-[30%] lg:max-w-sm">
+                                <div className="lg:py-2">
                                     <div
                                         dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(`<span>${index + 1}. &nbsp;</span>${item.s_question}`) }}
                                     />
