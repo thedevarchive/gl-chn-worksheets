@@ -82,7 +82,8 @@ export default function Home() {
 
   return (
     <main className="flex flex-col min-h-screen bg-gray-100 text-black">
-      <Header /> 
+      {/* Header */}
+      <Header isSimplified={true} />
 
       {/* Main Content */}
       <div className="flex flex-col items-center p-4 bg-violet-200 flex-1">
