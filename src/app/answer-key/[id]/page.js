@@ -125,6 +125,18 @@ const AnswerKey = () => {
                         ))
                     }
                 </div>
+
+                <h3 className="text-2xl font-bold text-center">Translations</h3>
+                <div className="flex flex-wrap justify-center max-w-5xl mx-auto">
+                    {
+                        trChn?.map((item, index) => (
+                            <div key={index} className="flex flex-col p-4 w-1/2">
+                                <div className="text-2xl py-2">{item.eng_s_sentence}</div>
+                                <div className="text-2xl font-bold">{item.chn_s_sentence}</div>
+                            </div>
+                        ))
+                    }
+                </div>
             </div>
         </main>
     );
