@@ -8,7 +8,6 @@ import DOMPurify from 'dompurify';
 
 import Header from "@/app/components/Header";
 
-
 const AnswerKey = () => {
     //initialise next/navigation variables
     const params = useParams();
@@ -17,7 +16,8 @@ const AnswerKey = () => {
 
     const [title, setTitle] = useState(""); //name of the current lesson
 
-    const [isSimplified, setIsSimplified] = useState(true);
+    //check if learner is looking for an answer key written in simplified Chinese
+    const [isSimplified, setIsSimplified] = useState(true); 
 
     //states for holding the lesson's possible questions
     const [chars, setChars] = useState([]);
@@ -55,6 +55,7 @@ const AnswerKey = () => {
         })
             .then((res) => res.json())
             .then((data) => {
+                setIsSimplified(script !== "traditional"); 
                 setTitle(data.title);
                 setChars(data.chars);
                 setVocab(data.vocab);
@@ -71,17 +72,17 @@ const AnswerKey = () => {
 
     return (
         <main className="flex flex-col min-h-screen bg-gray-100 text-black">
-            <Header isSimplified={script !== "traditional"} />
+            <Header isSimplified={isSimplified} />
             <div className="flex flex-col items-center p-4 bg-violet-200 flex-1">
                 <h1 className="text-3xl font-bold mt-6 mb-4 text-center">Lesson {lessonId}: {title}</h1>
                 <h2 className="text-2xl font-semibold mb-6 text-center">Answer Key</h2>
 
                 <h3 className="text-2xl font-bold mb-6 text-center">Characters Learned</h3>
-                <div className="flex flex-wrap">
+                <div className="flex flex-wrap pb-8">
                     {
                         chars?.map((item, index) => (
                             <div key={index} className="flex flex-col w-1/5 px-4 py-5 text-center">
-                                <div className="text-3xl font-bold">{item.s_hanzi}</div>
+                                <div className="text-3xl font-bold">{isSimplified ? item.s_hanzi : item.t_hanzi}</div>
                                 <div className="text-xl">{item.pinyin}</div>
                             </div>
                         ))
@@ -94,7 +95,7 @@ const AnswerKey = () => {
                         {
                             columns?.column1?.map((item, index) => (
                                 <div key={index}>
-                                    <div className="text-2xl whitespace-normal"><span className="font-bold">{index + 1}. {item.s_hanzi}</span> {item.pinyin} - {item.meaning}</div>
+                                    <div className="text-2xl whitespace-normal">{index + 1}. <span className="font-bold">{isSimplified ? item.s_hanzi : item.t_hanzi}</span> {item.pinyin} - {item.meaning}</div>
                                 </div>
                             ))
                         }
@@ -103,7 +104,7 @@ const AnswerKey = () => {
                         {
                             columns?.column2?.map((item, index) => (
                                 <div key={index}>
-                                    <div className="text-2xl"><span className="font-bold">{columns.column1.length + index + 1}. {item.s_hanzi}</span> {item.pinyin} - {item.meaning}</div>
+                                    <div className="text-2xl">{columns.column1.length + index + 1}. <span className="font-bold">{isSimplified ? item.s_hanzi : item.t_hanzi}</span> {item.pinyin} - {item.meaning}</div>
                                 </div>
                             ))
                         }
@@ -111,28 +112,28 @@ const AnswerKey = () => {
                 </div>
 
                 <h3 className="text-2xl font-bold text-center">Fill in the Blanks</h3>
-                <div className="flex flex-wrap justify-center max-w-5xl lg:gap-12 mx-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-16 max-w-4xl mx-auto">
                     {
                         fitb?.map((item, index) => (
-                            <div key={index} className="w-full text-2xl px-6 py-4 lg:w-[30%] lg:max-w-sm">
+                            <div key={index} className="text-2xl lg:ml-[15%] py-4 w-full max-w-[600px]">
                                 <div className="lg:py-2">
                                     <div
-                                        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(`<span>${index + 1}. &nbsp;</span>${item.s_question}`) }}
+                                        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(`<span>${index + 1}. &nbsp;</span>${isSimplified ? item.s_question : item.t_question}`) }}
                                     />
                                 </div>
-                                <div className="py-2"><span className="font-bold">Answer:</span> {item.s_answer}</div>
+                                <div className="py-2"><span className="font-bold">Answer:</span> {isSimplified ? item.s_answer : item.t_answer}</div>
                             </div>
                         ))
                     }
                 </div>
 
                 <h3 className="text-2xl font-bold text-center">Translations</h3>
-                <div className="flex flex-wrap justify-center max-w-5xl mx-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-16 max-w-4xl mx-auto">
                     {
                         trChn?.map((item, index) => (
-                            <div key={index} className="flex flex-col p-4 w-1/2">
-                                <div className="text-2xl py-2">{item.eng_s_sentence}</div>
-                                <div className="text-2xl font-bold">{item.chn_s_sentence}</div>
+                            <div key={index} className="text-2xl py-4 w-full max-w-[450px]">
+                                <div className="text-2xl py-2">{index + 1}. {isSimplified ? item.eng_s_sentence : item.eng_t_sentence}</div>
+                                <div className="text-2xl font-bold">{isSimplified ? item.chn_s_sentence : item.chn_t_sentence}</div>
                             </div>
                         ))
                     }
