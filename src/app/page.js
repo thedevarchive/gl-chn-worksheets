@@ -166,7 +166,7 @@ export default function Home() {
           </section>
 
           {/* Submit button */}
-          <button onClick={() => handleGenerate()} className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+          <button onClick={() => handleGenerate()} className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 cursor-pointer">
             Generate
           </button>
         </div>
