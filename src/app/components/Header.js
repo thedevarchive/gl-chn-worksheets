@@ -7,7 +7,7 @@ const Header = ({ isSimplified }) => {
     if (isSimplified)
         return (
             <header className="w-full bg-red-600 p-4 shadow-md flex items-center">
-                <div className="max-w-screen-xl mx-auto flex items-center gap-4">
+                <Link href="/" className="max-w-screen-xl mx-auto flex items-center gap-4">
                     <div className="border border-4 border-yellow-500 rounded-md text-yellow-500 text-5xl">
                         龚李
                     </div>
@@ -21,7 +21,7 @@ const Header = ({ isSimplified }) => {
                         </div>
                         <span className="text-lg font-bold text-white">Gong Li Worksheets</span>
                     </div>
-                </div>
+                </Link>
             </header>
         );
     else

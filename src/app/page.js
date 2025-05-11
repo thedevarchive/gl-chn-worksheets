@@ -10,6 +10,7 @@ export default function Home() {
 
   const [lessonArr, setLessonArr] = useState([]);
   const [selectedLesson, setSelectedLesson] = useState("1");
+  const [isForKids, setIsForKids] = useState(false);
   const [questions, setQuestions] = useState(0);
   //const [isSimplified, setIsSimplified] = useState(true); 
 
@@ -38,6 +39,7 @@ export default function Home() {
 
   const handleGenerate = () => {
     console.log("Selected level:", selectedLesson);
+    console.log("For Kids?", isForKids);
     console.log("Number of questions:", questions);
     console.log("Match Pinyin?", matchPinyin);
     console.log("Match Meaning?", matchMeaning);
@@ -50,6 +52,7 @@ export default function Home() {
       headers: {
         "accept": "application/json",
         "Content-Type": "application/json",
+        is_for_kids: String(isForKids),
         questions: String(questions),
         match_pinyin: String(matchPinyin),
         match_meaning: String(matchMeaning),
@@ -68,7 +71,7 @@ export default function Home() {
         // pdfBlob is a Blob; you can handle it as a PDF
         const pdfUrl = URL.createObjectURL(pdfBlob);
         console.log(pdfBlob);
-    
+
         // Open the PDF in a new window or tab
         const newWindow = window.open(pdfUrl, '_blank'); // '_blank' ensures it opens in a new tab/window
         if (newWindow) {
@@ -88,10 +91,10 @@ export default function Home() {
       {/* Main Content */}
       <div className="flex flex-col items-center p-4 bg-violet-200 flex-1">
         <div className="flex flex-col items-center bg-white p-8 rounded-2xl shadow-md w-full max-w-md mt-12">
-          <h1 className="text-2xl font-bold mb-6 text-center">Generate Worksheet</h1>
+          <h1 className="text-2xl font-bold mb-4 text-center">Generate Worksheet</h1>
 
           {/* Level selection */}
-          <section className="flex flex-col items-center mb-6">
+          <section className="flex flex-col items-center mb-4">
             <h2 className="text-xl font-semibold mb-2">Select Lesson</h2>
             <select
               value={selectedLesson}
@@ -104,6 +107,15 @@ export default function Home() {
                 ))
               }
             </select>
+          </section>
+
+          <section className="flex flex-col items-center mb-4">
+            <div className="flex flex-col justify-center gap-2">
+              <label className="flex items-center space-x-2">
+                <input type="checkbox" name="isForKids" onChange={() => setIsForKids(!isForKids)} className="accent-yellow-500" />
+                <span>Are you making this worksheet for kids?</span>
+              </label>
+            </div>
           </section>
 
           {/* Number of questions */}
