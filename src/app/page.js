@@ -223,7 +223,7 @@ export default function Home() {
           }
 
           {/* Submit button */}
-          <button disabled={!Object.values(qTypes).some(value => value === true) && selectedFormat === "" && questions === 0} onClick={() => handleGenerate()} className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 cursor-pointer">
+          <button disabled={questions === 0 || selectedFormat === "" || !Object.values(qTypes).some(value => value === true)} onClick={() => handleGenerate()} className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed">
             Generate
           </button>
         </div>
