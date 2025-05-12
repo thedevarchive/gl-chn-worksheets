@@ -17,7 +17,7 @@ const AnswerKey = () => {
     const [title, setTitle] = useState(""); //name of the current lesson
 
     //check if learner is looking for an answer key written in simplified Chinese
-    const [isSimplified, setIsSimplified] = useState(true); 
+    const [isSimplified, setIsSimplified] = useState(true);
 
     //states for holding the lesson's possible questions
     const [chars, setChars] = useState([]);
@@ -55,7 +55,7 @@ const AnswerKey = () => {
         })
             .then((res) => res.json())
             .then((data) => {
-                setIsSimplified(script !== "traditional"); 
+                setIsSimplified(script !== "traditional");
                 setTitle(data.title);
                 setChars(data.chars);
                 setVocab(data.vocab);
@@ -91,7 +91,7 @@ const AnswerKey = () => {
 
                 <h3 className="text-2xl font-bold text-center">Vocabulary</h3>
                 <div className="flex flex-col gap-y-4 md:items-center lg:items-stretch py-8 lg:p-8 md:gap-8 lg:flex-row lg:gap-30">
-                    <div className="flex flex-col gap-4 p-10 rounded-2xl w-90 lg:min-w-sm lg:max-w-sm bg-gradient-to-b from-violet-400 to-violet-100">
+                    <div className="flex flex-col gap-4 p-10 rounded-2xl w-90 lg:min-w-sm lg:max-w-sm bg-violet-300">
                         {
                             columns?.column1?.map((item, index) => (
                                 <div key={index}>
@@ -100,7 +100,7 @@ const AnswerKey = () => {
                             ))
                         }
                     </div>
-                    <div className="flex flex-col gap-4 p-10 rounded-2xl w-90 lg:min-w-sm lg:max-w-sm bg-gradient-to-b from-violet-400 to-violet-100">
+                    <div className="flex flex-col gap-4 p-10 rounded-2xl w-90 lg:min-w-sm lg:max-w-sm bg-violet-300">
                         {
                             columns?.column2?.map((item, index) => (
                                 <div key={index}>
@@ -115,13 +115,14 @@ const AnswerKey = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-16 max-w-4xl mx-auto">
                     {
                         fitb?.map((item, index) => (
-                            <div key={index} className="text-2xl lg:ml-[15%] py-4 w-full max-w-[600px]">
-                                <div className="lg:py-2">
-                                    <div
-                                        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(`<span>${index + 1}. &nbsp;</span>${isSimplified ? item.s_question : item.t_question}`) }}
+                            <div key={index} className="text-2xl py-4 w-full max-w-[600px]">
+                                <div className="flex items-start lg:py-2">
+                                    <span>{index + 1}. &nbsp;</span>
+                                    <pre className="mt-0 mb-0 mr-0 ml-2 font-inherit"
+                                        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(`${isSimplified ? item.s_question : item.t_question}`) }}
                                     />
                                 </div>
-                                <div className="py-2"><span className="font-bold">Answer:</span> {isSimplified ? item.s_answer : item.t_answer}</div>
+                                <div className="ml-10 py-2"><span className="font-bold">Answer:</span> {isSimplified ? item.s_answer : item.t_answer}</div>
                             </div>
                         ))
                     }

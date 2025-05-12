@@ -19,6 +19,7 @@ export default function Home() {
   const [matchMeaning, setMatchMeaning] = useState(false);
   const [fillBlank, setFillBlank] = useState(false);
   const [translateChn, setTranslateChn] = useState(false);
+  const [idCorSen, setIdCorSen] = useState(false);
 
   const [selectedFormat, setSelectedFormat] = useState("");
 
@@ -58,6 +59,7 @@ export default function Home() {
         match_meaning: String(matchMeaning),
         fill_blank: String(fillBlank),
         translate_chn: String(translateChn),
+        translate_chn: String(idCorSen),
         question_format: selectedFormat
       },
     })
@@ -155,6 +157,10 @@ export default function Home() {
               <label className="flex items-center space-x-2">
                 <input type="checkbox" name="qType" onChange={() => setTranslateChn(!translateChn)} className="accent-yellow-500" />
                 <span>Translate to Chinese</span>
+              </label>
+              <label className="flex items-center space-x-2">
+                <input type="checkbox" name="qType" onChange={() => setIdCorSen(!idCorSen)} className="accent-yellow-500" />
+                <span>Identify Correct Sentence</span>
               </label>
             </div>
           </section>
