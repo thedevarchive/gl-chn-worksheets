@@ -14,14 +14,42 @@ export default function Home() {
   const [questions, setQuestions] = useState(0);
   //const [isSimplified, setIsSimplified] = useState(true); 
 
-  //boolean value states for question types 
-  const [matchPinyin, setMatchPinyin] = useState(false);
-  const [matchMeaning, setMatchMeaning] = useState(false);
-  const [fillBlank, setFillBlank] = useState(false);
-  const [translateChn, setTranslateChn] = useState(false);
-  const [idCorSen, setIdCorSen] = useState(false);
+  //object state containing boolean values for question types 
+  const [qTypes, setQTypes] = useState({
+    matchPinyin: false,
+    matchMeaning: false,
+    fillBlank: false,
+    translateChn: false,
+    idCorSen: false,
+  });
 
   const [selectedFormat, setSelectedFormat] = useState("");
+
+  //function getting the question types that are visible depending on format selected
+  const getVisibleQTypes = () => {
+    switch (questionFormat) {
+      case "MC":
+        return ["matchPinyin", "matchMeaning", "fillBlank", "idCorSen"];
+      case "WR":
+        return ["matchPinyin", "matchMeaning", "fillBlank", "translateChn"];
+      case "MW":
+        return ["matchPinyin", "matchMeaning", "fillBlank", "translateChn", "idCorSen"];
+      default:
+        return [];
+    }
+  };
+
+  //function for ticking all visible question types
+  const handleSelectAllVisible = () => {
+    const visible = getVisibleQTypes();
+    const updated = { ...qTypes };
+  
+    visible.forEach((key) => {
+      updated[key] = true;
+    });
+  
+    setQTypes(updated);
+  };
 
   const API_URL = "http://localhost:9080";
 
@@ -42,10 +70,10 @@ export default function Home() {
     console.log("Selected level:", selectedLesson);
     console.log("For Kids?", isForKids);
     console.log("Number of questions:", questions);
-    console.log("Match Pinyin?", matchPinyin);
-    console.log("Match Meaning?", matchMeaning);
-    console.log("FITB?", fillBlank);
-    console.log("TL Chinese?", translateChn);
+    console.log("Match Pinyin?", qTypes.matchPinyin);
+    console.log("Match Meaning?", qTypes.matchMeaning);
+    console.log("FITB?", qTypes.fillBlank);
+    console.log("TL Chinese?", qTypes.translateChn);
     console.log("Selected Format:", selectedFormat);
 
     fetch(`${API_URL}/worksheets/${selectedLesson}`, {
@@ -55,11 +83,11 @@ export default function Home() {
         "Content-Type": "application/json",
         is_for_kids: String(isForKids),
         questions: String(questions),
-        match_pinyin: String(matchPinyin),
-        match_meaning: String(matchMeaning),
-        fill_blank: String(fillBlank),
-        translate_chn: String(translateChn),
-        translate_chn: String(idCorSen),
+        match_pinyin: String(qTypes.matchPinyin),
+        match_meaning: String(qTypes.matchMeaning),
+        fill_blank: String(qTypes.fillBlank),
+        translate_chn: String(qTypes.translateChn),
+        ics: String(qTypes.idCorSen),
         question_format: selectedFormat
       },
     })
@@ -140,32 +168,6 @@ export default function Home() {
           </section>
 
           <section className="flex flex-col items-center mb-6">
-            <h2 className="text-xl font-semibold mb-2">Select Question Types</h2>
-            <div className="flex flex-col justify-center gap-2">
-              <label className="flex items-center space-x-2">
-                <input type="checkbox" name="qType" onChange={() => setMatchPinyin(!matchPinyin)} className="accent-yellow-500" />
-                <span>Match Pinyin to Word</span>
-              </label>
-              <label className="flex items-center space-x-2">
-                <input type="checkbox" name="qType" onChange={() => setMatchMeaning(!matchMeaning)} className="accent-yellow-500" />
-                <span>Match Meaning to Word</span>
-              </label>
-              <label className="flex items-center space-x-2">
-                <input type="checkbox" name="qType" onChange={() => setFillBlank(!fillBlank)} className="accent-yellow-500" />
-                <span>Fill in the Blank</span>
-              </label>
-              <label className="flex items-center space-x-2">
-                <input type="checkbox" name="qType" onChange={() => setTranslateChn(!translateChn)} className="accent-yellow-500" />
-                <span>Translate to Chinese</span>
-              </label>
-              <label className="flex items-center space-x-2">
-                <input type="checkbox" name="qType" onChange={() => setIdCorSen(!idCorSen)} className="accent-yellow-500" />
-                <span>Identify Correct Sentence</span>
-              </label>
-            </div>
-          </section>
-
-          <section className="flex flex-col items-center mb-6">
             <h2 className="text-xl font-semibold mb-2">Select Question Format</h2>
             <div className="flex gap-4">
               <label className="flex items-center space-x-2">
@@ -183,8 +185,44 @@ export default function Home() {
             </div>
           </section>
 
+          {
+            selectedFormat &&
+            <section className="flex flex-col items-center mb-6">
+              <h2 className="text-xl font-semibold mb-2">Select Question Types</h2>
+              <div className="flex flex-col justify-center gap-2">
+                <label className="flex items-center space-x-2">
+                  <input type="checkbox" name="qType" onChange={() => setQTypes(prev => ({ ...prev, matchPinyin: !prev.matchPinyin }))} className="accent-yellow-500" />
+                  <span>Match Pinyin to Word</span>
+                </label>
+                <label className="flex items-center space-x-2">
+                  <input type="checkbox" name="qType" onChange={() => setQTypes(prev => ({ ...prev, matchMeaning: !prev.matchMeaning }))} className="accent-yellow-500" />
+                  <span>Match Meaning to Word</span>
+                </label>
+                <label className="flex items-center space-x-2">
+                  <input type="checkbox" name="qType" onChange={() => setQTypes(prev => ({ ...prev, fillBlank: !prev.fillBlank }))} className="accent-yellow-500" />
+                  <span>Fill in the Blank</span>
+                </label>
+                {/* Only show certain question types upon reaching a certain lesson or if a question format is selected or both*/}
+                {
+                  selectedFormat !== "MC" && 
+                  <label className="flex items-center space-x-2">
+                    <input type="checkbox" name="qType" onChange={() => setQTypes(prev => ({ ...prev, translateChn: !prev.translateChn }))} className="accent-yellow-500" />
+                    <span>Translate to Chinese</span>
+                  </label>
+                }
+                {
+                  selectedLesson >= 4 && selectedFormat !== "WR" &&
+                  <label className="flex items-center space-x-2">
+                    <input type="checkbox" name="qType" onChange={() => setQTypes(prev => ({ ...prev, idCorSen: !prev.idCorSen }))} className="accent-yellow-500" />
+                    <span>Identify Correct Sentence</span>
+                  </label>
+                }
+              </div>
+            </section>
+          }
+
           {/* Submit button */}
-          <button onClick={() => handleGenerate()} className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 cursor-pointer">
+          <button disabled={!Object.values(qTypes).some(value => value === true) && selectedFormat === "" && questions === 0} onClick={() => handleGenerate()} className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 cursor-pointer">
             Generate
           </button>
         </div>
