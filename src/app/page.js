@@ -42,10 +42,11 @@ export default function Home() {
   //function for ticking all visible question types
   const handleSelectAllVisible = () => {
     const visible = getVisibleQTypes();
+    const areAllSelected = visible.every(type => qTypes[type]);
     const updated = { ...qTypes };
   
     visible.forEach((key) => {
-      updated[key] = true;
+      updated[key] = !areAllSelected; // if all selected, uncheck; else, check all
     });
   
     setQTypes(updated);
