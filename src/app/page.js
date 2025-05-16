@@ -27,7 +27,7 @@ export default function Home() {
   const [selectedFormat, setSelectedFormat] = useState("");
 
   //function getting the question types that are visible depending on format selected
-  const getVisibleQTypes = () => {
+  const getVisibleQTypes = (format = selectedFormat) => {
     switch (selectedFormat) {
       case "MC":
         return ["matchPinyin", "matchMeaning", "fillBlank", "idCorSen"];
@@ -51,6 +51,18 @@ export default function Home() {
     });
 
     setQTypes(updated);
+  };
+
+  const handleFormatChange = (format) => {
+    setSelectedFormat(format);
+    
+    const visibleTypes = new Set(getVisibleQTypes(format));
+    
+    const updatedQTypes = Object.fromEntries(
+      Object.keys(qTypes).map((key) => [key, visibleTypes.has(key) ? qTypes[key] : false])
+    );
+  
+    setQTypes(updatedQTypes);
   };
 
   const API_URL = "http://localhost:9080";
@@ -172,7 +184,7 @@ export default function Home() {
 
           <section className="flex flex-col items-center mb-6">
             <h2 className="text-xl font-semibold mb-2">Select Question Format</h2>
-            <div className="flex gap-4">
+            <div className="flex gap-4" onChange={(e) => handleFormatChange(e.target.value)}>
               <label className="flex items-center space-x-2">
                 <input type="radio" name="qFormat" value="MC" checked={selectedFormat === "MC"} onChange={(e) => setSelectedFormat(e.target.value)} className="accent-yellow-500" />
                 <span>Multiple Choice</span>
