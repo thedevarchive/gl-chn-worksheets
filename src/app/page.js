@@ -21,19 +21,20 @@ export default function Home() {
     fillBlank: false,
     translateChn: false,
     idCorSen: false,
+    reconSentence: false, 
   });
 
   const [selectedFormat, setSelectedFormat] = useState("");
 
   //function getting the question types that are visible depending on format selected
   const getVisibleQTypes = () => {
-    switch (questionFormat) {
+    switch (selectedFormat) {
       case "MC":
         return ["matchPinyin", "matchMeaning", "fillBlank", "idCorSen"];
       case "WR":
-        return ["matchPinyin", "matchMeaning", "fillBlank", "translateChn"];
+        return ["matchPinyin", "matchMeaning", "fillBlank", "translateChn", "reconSentence"];
       case "MW":
-        return ["matchPinyin", "matchMeaning", "fillBlank", "translateChn", "idCorSen"];
+        return ["matchPinyin", "matchMeaning", "fillBlank", "translateChn", "idCorSen", "reconSentence"];
       default:
         return [];
     }
@@ -44,11 +45,11 @@ export default function Home() {
     const visible = getVisibleQTypes();
     const areAllSelected = visible.every(type => qTypes[type]);
     const updated = { ...qTypes };
-  
+
     visible.forEach((key) => {
-      updated[key] = !areAllSelected; // if all selected, uncheck; else, check all
+      updated[key] = !areAllSelected; // if all selected, untick; else, tick all
     });
-  
+
     setQTypes(updated);
   };
 
@@ -89,6 +90,7 @@ export default function Home() {
         fill_blank: String(qTypes.fillBlank),
         translate_chn: String(qTypes.translateChn),
         ics: String(qTypes.idCorSen),
+        recon_sentence: String(qTypes.reconSentence), 
         question_format: selectedFormat
       },
     })
@@ -192,31 +194,42 @@ export default function Home() {
               <h2 className="text-xl font-semibold mb-2">Select Question Types</h2>
               <div className="flex flex-col justify-center gap-2">
                 <label className="flex items-center space-x-2">
-                  <input type="checkbox" name="qType" onChange={() => setQTypes(prev => ({ ...prev, matchPinyin: !prev.matchPinyin }))} className="accent-yellow-500" />
+                  <input type="checkbox" name="qType" checked={getVisibleQTypes().every(type => qTypes[type])} onChange={handleSelectAllVisible} className="accent-yellow-500" />
+                  <span>Select All</span>
+                </label>
+                <label className="flex items-center space-x-2">
+                  <input type="checkbox" name="qType" checked={qTypes.matchPinyin} onChange={() => setQTypes(prev => ({ ...prev, matchPinyin: !prev.matchPinyin }))} className="accent-yellow-500" />
                   <span>Match Pinyin to Word</span>
                 </label>
                 <label className="flex items-center space-x-2">
-                  <input type="checkbox" name="qType" onChange={() => setQTypes(prev => ({ ...prev, matchMeaning: !prev.matchMeaning }))} className="accent-yellow-500" />
+                  <input type="checkbox" name="qType" checked={qTypes.matchMeaning} onChange={() => setQTypes(prev => ({ ...prev, matchMeaning: !prev.matchMeaning }))} className="accent-yellow-500" />
                   <span>Match Meaning to Word</span>
                 </label>
                 <label className="flex items-center space-x-2">
-                  <input type="checkbox" name="qType" onChange={() => setQTypes(prev => ({ ...prev, fillBlank: !prev.fillBlank }))} className="accent-yellow-500" />
+                  <input type="checkbox" name="qType" checked={qTypes.fillBlank} onChange={() => setQTypes(prev => ({ ...prev, fillBlank: !prev.fillBlank }))} className="accent-yellow-500" />
                   <span>Fill in the Blank</span>
                 </label>
                 {/* Only show certain question types upon reaching a certain lesson or if a question format is selected or both*/}
                 {
-                  selectedFormat !== "MC" && 
+                  selectedFormat !== "MC" &&
                   <label className="flex items-center space-x-2">
-                    <input type="checkbox" name="qType" onChange={() => setQTypes(prev => ({ ...prev, translateChn: !prev.translateChn }))} className="accent-yellow-500" />
+                    <input type="checkbox" name="qType" checked={qTypes.translateChn} onChange={() => setQTypes(prev => ({ ...prev, translateChn: !prev.translateChn }))} className="accent-yellow-500" />
                     <span>Translate to Chinese</span>
-                  </label>
+                  </label> 
                 }
                 {
                   selectedLesson >= 4 && selectedFormat !== "WR" &&
                   <label className="flex items-center space-x-2">
-                    <input type="checkbox" name="qType" onChange={() => setQTypes(prev => ({ ...prev, idCorSen: !prev.idCorSen }))} className="accent-yellow-500" />
+                    <input type="checkbox" name="qType" checked={qTypes.idCorSen} onChange={() => setQTypes(prev => ({ ...prev, idCorSen: !prev.idCorSen }))} className="accent-yellow-500" />
                     <span>Identify Correct Sentence</span>
                   </label>
+                }
+                {
+                  selectedLesson >= 5 && selectedFormat !== "MC" &&
+                  <label className="flex items-center space-x-2">
+                    <input type="checkbox" name="qType" checked={qTypes.reconSentence} onChange={() => setQTypes(prev => ({ ...prev, reconSentence: !prev.reconSentence }))} className="accent-yellow-500" />
+                    <span>Reconstruct Sentence</span>
+                  </label> 
                 }
               </div>
             </section>
