@@ -118,7 +118,7 @@ const AnswerKey = () => {
                             <div key={index} className="text-2xl py-4 w-full max-w-[600px]">
                                 <div className="flex items-start lg:py-2">
                                     <span>{index + 1}. &nbsp;</span>
-                                    <pre className="mt-0 mb-0 mr-0 ml-2 font-inherit"
+                                    <pre className="mt-0 mb-0 mr-0 ml-2 font-inherit whitespace-pre-wrap"
                                         dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(`${isSimplified ? item.s_question : item.t_question}`) }}
                                     />
                                 </div>
@@ -134,7 +134,17 @@ const AnswerKey = () => {
                         trChn?.map((item, index) => (
                             <div key={index} className="text-2xl py-4 w-full max-w-[450px]">
                                 <div className="text-2xl py-2">{index + 1}. {isSimplified ? item.eng_s_sentence : item.eng_t_sentence}</div>
-                                <div className="text-2xl font-bold">{isSimplified ? item.chn_s_sentence : item.chn_t_sentence}</div>
+                                <div className="text-2xl py-2 font-bold">Answer(s):</div>
+                                <ul className="list-disc list-inside">
+                                {
+                                    isSimplified ? 
+                                    item.chn_s_sentence.split(",").map((ans, ind) => (
+                                        <li key={ind}>{ans}</li>
+                                    )) : item.chn_t_sentence.split(",").map((ans, ind) => (
+                                        <li key={ind}>{ans}</li>
+                                    )) 
+                                }
+                                </ul>
                             </div>
                         ))
                     }
