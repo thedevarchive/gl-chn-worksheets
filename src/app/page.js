@@ -147,15 +147,17 @@ export default function Home() {
     else if (lessons - 1 > 0) setEndLesson(Number(selectedLesson) + lessons - 1);
   }, [selectedLesson]);
 
-
   const handleAcademicPerformance = () => {
-    fetch(`${API_URL}/worksheets/${selectedLesson}`, {
-      method: "GET",
+    fetch(`${API_URL}/academic-performance/${selectedLesson}`, {
+      method: "POST",
       headers: {
         "accept": "application/json",
         "Content-Type": "application/json",
-        //TODO: add more headers here
       },
+      body: JSON.stringify({
+        end_lesson: endLesson, 
+        questions: String(questions)
+      })
     })
       .then((res) => {
         if (!res.ok) {
@@ -268,7 +270,7 @@ export default function Home() {
                 </section>
 
                 {/* Submit button */}
-                <button disabled={lessons === 0 || questions === 0} onClick={() => handleGenerate()} className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed">
+                <button disabled={lessons === 0 || questions === 0} onClick={() => handleAcademicPerformance()} className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed">
                   Generate
                 </button>
               </>
