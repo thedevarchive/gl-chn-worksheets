@@ -11,6 +11,8 @@ export default function Home() {
   const [lessonArr, setLessonArr] = useState([]);
   const [selectedLesson, setSelectedLesson] = useState("1");
   const [isAcaPerfWS, setIsAcaPerfWS] = useState(false);
+  const [lessons, setLessons] = useState(0);
+  const [endLesson, setEndLesson] = useState("1");
   const [isForKids, setIsForKids] = useState(false);
   const [questions, setQuestions] = useState(0);
   //const [isSimplified, setIsSimplified] = useState(true); 
@@ -29,13 +31,21 @@ export default function Home() {
 
   //function getting the question types that are visible depending on format selected
   const getVisibleQTypes = (format = selectedFormat) => {
-    switch (selectedFormat) {
+    const supportsIdCorSen = Number(selectedLesson) >= 4; // becomes available after lesson 4
+    const supportsReconSentence = Number(selectedLesson) >= 5; // becomes available after lesson 5
+
+    const base = ["matchPinyin", "matchMeaning", "fillBlank"];
+    const wrExtras = ["translateChn"];
+    const idCorSenOption = supportsIdCorSen ? ["idCorSen"] : []; //add identify correct sentence if selected lesson is 4 and above 
+    const reconSentenceOption = supportsReconSentence ? ["reconSentence"] : [];
+
+    switch (format) {
       case "MC":
-        return ["matchPinyin", "matchMeaning", "fillBlank", "idCorSen"];
+        return [...base, ...idCorSenOption];
       case "WR":
-        return ["matchPinyin", "matchMeaning", "fillBlank", "translateChn", "reconSentence"];
+        return [...base, ...wrExtras, ...reconSentenceOption];
       case "MW":
-        return ["matchPinyin", "matchMeaning", "fillBlank", "translateChn", "idCorSen", "reconSentence"];
+        return [...base, ...wrExtras, ...idCorSenOption, ...reconSentenceOption];
       default:
         return [];
     }
@@ -92,10 +102,12 @@ export default function Home() {
     console.log("Selected Format:", selectedFormat);
 
     fetch(`${API_URL}/worksheets/${selectedLesson}`, {
-      method: "GET",
+      method: "POST",
       headers: {
         "accept": "application/json",
         "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
         is_for_kids: String(isForKids),
         questions: String(questions),
         match_pinyin: String(qTypes.matchPinyin),
@@ -105,6 +117,44 @@ export default function Home() {
         ics: String(qTypes.idCorSen),
         recon_sentence: String(qTypes.reconSentence),
         question_format: selectedFormat
+      }),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return res.blob(); // Convert the response to a Blob
+      })
+      .then((pdfBlob) => {
+        // pdfBlob is a Blob; you can handle it as a PDF
+        const pdfUrl = URL.createObjectURL(pdfBlob);
+        console.log(pdfBlob);
+
+        // Open the PDF in a new window or tab
+        const newWindow = window.open(pdfUrl, '_blank'); // '_blank' ensures it opens in a new tab/window
+        if (newWindow) {
+          newWindow.focus(); // Brings the new window to focus
+        } else {
+          console.error("Failed to open new window. Allow popups for this website to view the worksheet.");
+        }
+      })
+      .catch((err) => console.error(err));
+  };
+
+  //update 
+  useEffect(() => {
+    if (endLesson < selectedLesson) setEndLesson(selectedLesson);
+    else if (lessons - 1 > 0) setEndLesson(Number(selectedLesson) + lessons - 1);
+  }, [selectedLesson]);
+
+
+  const handleAcademicPerformance = () => {
+    fetch(`${API_URL}/worksheets/${selectedLesson}`, {
+      method: "GET",
+      headers: {
+        "accept": "application/json",
+        "Content-Type": "application/json",
+        //TODO: add more headers here
       },
     })
       .then((res) => {
@@ -140,22 +190,88 @@ export default function Home() {
           <h1 className="text-2xl font-bold mb-4 text-center">Generate Worksheet</h1>
 
           <section className="flex flex-col items-center mb-4">
+            <h2 className="text-xl font-semibold mb-2">Select Modes</h2>
             <div className="flex flex-col justify-center gap-2">
               <label className="flex items-center space-x-2">
                 <input type="checkbox" name="isAcaPerfWS" onChange={() => setIsAcaPerfWS(!isAcaPerfWS)} className="accent-yellow-500" />
-                <span>Generate Academic Performance Worksheet</span>
+                <span>Academic Performance Mode</span>
               </label>
 
               <label className="flex items-center space-x-2">
                 <input type="checkbox" name="isForKids" onChange={() => setIsForKids(!isForKids)} className="accent-yellow-500" />
-                <span>Are you making this worksheet for kids?</span>
+                <span>Junior Mode</span>
               </label>
             </div>
           </section>
 
           {
             isAcaPerfWS ? (
-              <></>
+              <>
+                {/* Level selection */}
+                <section className="flex flex-col items-center mb-4">
+                  <h2 className="text-xl font-semibold mb-2">Starting Lesson</h2>
+                  <select
+                    value={selectedLesson}
+                    onChange={(e) => setSelectedLesson(e.target.value)}
+                    className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    {
+                      lessonArr.map((lesson) => (
+                        <option key={lesson.id} value={lesson.id}>{lesson.title}</option>
+                      ))
+                    }
+                  </select>
+                </section>
+
+                <section className="flex flex-col items-center mb-6">
+                  <h2 className="text-xl font-semibold mb-2">Select Number of Lessons</h2>
+                  <div className="flex gap-4">
+                    <label className="flex items-center space-x-2">
+                      <input type="radio" name="lessons" onChange={() => { setLessons(3); setEndLesson(Number(selectedLesson) + 2); }} className="accent-yellow-500" />
+                      <span>3</span>
+                    </label>
+                    <label className="flex items-center space-x-2">
+                      <input type="radio" name="lessons" onChange={() => { setLessons(4); setEndLesson(Number(selectedLesson) + 3); }} className="accent-yellow-500" />
+                      <span>4</span>
+                    </label>
+                    <label className="flex items-center space-x-2">
+                      <input type="radio" name="lessons" onChange={() => { setLessons(5); setEndLesson(Number(selectedLesson) + 4); }} className="accent-yellow-500" />
+                      <span>5</span>
+                    </label>
+                  </div>
+                </section>
+
+                <section className="flex flex-col items-center mb-4">
+                  <h2 className="text-xl font-semibold mb-2">Preview Lesson Coverage</h2>
+                  <p className="text-lg mb-2">Lesson {lessonArr[Number(selectedLesson) - 1].id}: {lessonArr[Number(selectedLesson) - 1].title}</p>
+                  <p className="text-lg mb-2">to</p>
+                  <p className="text-lg mb-2">Lesson {lessonArr[Number(endLesson) - 1].id}: {lessonArr[Number(endLesson) - 1].title}</p>
+                </section>
+
+                {/* Number of questions */}
+                <section className="flex flex-col items-center mb-6">
+                  <h2 className="text-xl font-semibold mb-2">Select Number of Questions</h2>
+                  <div className="flex gap-4">
+                    <label className="flex items-center space-x-2">
+                      <input type="radio" name="questions" onChange={() => setQuestions(60)} className="accent-yellow-500" />
+                      <span>60</span>
+                    </label>
+                    <label className="flex items-center space-x-2">
+                      <input type="radio" name="questions" onChange={() => setQuestions(70)} className="accent-yellow-500" />
+                      <span>70</span>
+                    </label>
+                    <label className="flex items-center space-x-2">
+                      <input type="radio" name="questions" onChange={() => setQuestions(80)} className="accent-yellow-500" />
+                      <span>80</span>
+                    </label>
+                  </div>
+                </section>
+
+                {/* Submit button */}
+                <button disabled={lessons === 0 || questions === 0} onClick={() => handleGenerate()} className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed">
+                  Generate
+                </button>
+              </>
             ) : (
               <>
                 {/* Level selection */}
@@ -257,7 +373,7 @@ export default function Home() {
                     </div>
                   </section>
                 }
-                
+
                 {/* Submit button */}
                 <button disabled={questions === 0 || selectedFormat === "" || !Object.values(qTypes).some(value => value === true)} onClick={() => handleGenerate()} className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed">
                   Generate
