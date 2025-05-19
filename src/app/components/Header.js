@@ -26,14 +26,14 @@ const Header = ({ isSimplified }) => {
                     <div className="text-lg text-white">FAQ</div>
                     <div className="text-lg text-white">Resources</div>
                     <div className="text-lg text-white">Study Tips</div>
-                    <div className="text-lg text-white">Lesson Guide</div>
+                    <Link href="/lesson-guide" className="text-lg text-white cursor-pointer">Lesson Guide</Link>
                 </div>
             </header>
         );
     else
         return (
-            <header className="w-full bg-red-600 p-4 shadow-md flex items-center">
-                <div className="max-w-screen-xl mx-auto flex items-center gap-4">
+            <header className="w-full mx-auto bg-red-600 p-4 shadow-md flex items-center justify-center lg:gap-180">
+                <div className="max-w-screen-xl flex items-center gap-4">
                     <div className="border border-4 border-yellow-500 rounded-md text-yellow-500 text-5xl">
                         龔李
                     </div>
@@ -47,6 +47,12 @@ const Header = ({ isSimplified }) => {
                         </div>
                         <span className="text-lg font-bold text-white">Gong Li Worksheets</span>
                     </div>
+                </div>
+                <div className="flex gap-4">
+                    <div className="text-lg text-white">FAQ</div>
+                    <div className="text-lg text-white">Resources</div>
+                    <div className="text-lg text-white">Study Tips</div>
+                    <Link href="/lesson-guide" className="text-lg text-white cursor-pointer">Lesson Guide</Link>
                 </div>
             </header>
         );
