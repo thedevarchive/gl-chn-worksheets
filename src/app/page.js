@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import Header from "./components/Header";
+import LanguageToggle from "./components/LanguageToggle";
 
 export default function Home() {
   const router = useRouter(); // Initialise useRouter
@@ -15,6 +16,7 @@ export default function Home() {
   const [endLesson, setEndLesson] = useState("1");
   const [isForKids, setIsForKids] = useState(false);
   const [questions, setQuestions] = useState(0);
+  const [isChineseTr, setIsChineseTr] = useState(false); 
   //const [isSimplified, setIsSimplified] = useState(true); 
 
   //object state containing boolean values for question types 
@@ -160,7 +162,7 @@ export default function Home() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        end_lesson: endLesson, 
+        end_lesson: endLesson,
         questions: String(questions),
         is_for_kids: String(isForKids),
       })
@@ -193,7 +195,10 @@ export default function Home() {
       <Header isSimplified={true} />
 
       {/* Main Content */}
-      <div className="flex flex-col items-center p-4 bg-violet-200 flex-1">
+      <div className="flex flex-col items-center p-4 bg-violet-200 flex-1 w-full">
+        <div className="flex justify-end w-full">
+          <LanguageToggle currentLang={isChineseTr} onToggle={() => setIsChineseTr(!isChineseTr)} />
+        </div>
         <div className="flex flex-col items-center bg-white p-8 rounded-2xl shadow-md w-full max-w-md mt-12">
           <h1 className="text-2xl font-bold mb-4 text-center">Generate Worksheet</h1>
 
@@ -225,7 +230,7 @@ export default function Home() {
                   >
                     {
                       lessonArr.map((lesson) => (
-                        <option key={lesson.id} value={lesson.id}>{lesson.title}</option>
+                        <option key={lesson.id} value={lesson.id}>{isChineseTr ? lesson.s_chn_title : lesson.eng_title}</option>
                       ))
                     }
                   </select>
@@ -251,9 +256,9 @@ export default function Home() {
 
                 <section className="flex flex-col items-center mb-4">
                   <h2 className="text-xl font-semibold mb-2">Preview Lesson Coverage</h2>
-                  <p className="text-lg mb-2">Lesson {lessonArr[Number(selectedLesson) - 1].id}: {lessonArr[Number(selectedLesson) - 1].title}</p>
+                  <p className="text-lg mb-2">Lesson {lessonArr[Number(selectedLesson) - 1].id}: {isChineseTr ? lessonArr[Number(selectedLesson) - 1].s_chn_title : lessonArr[Number(selectedLesson) - 1].eng_title}</p>
                   <p className="text-lg mb-2">to</p>
-                  <p className="text-lg mb-2">Lesson {lessonArr[Number(endLesson) - 1].id}: {lessonArr[Number(endLesson) - 1].title}</p>
+                  <p className="text-lg mb-2">Lesson {lessonArr[Number(endLesson) - 1].id}: {isChineseTr ? lessonArr[Number(endLesson) - 1].s_chn_title : lessonArr[Number(endLesson) - 1].eng_title}</p>
                 </section>
 
                 {/* Number of questions */}
@@ -292,7 +297,7 @@ export default function Home() {
                   >
                     {
                       lessonArr.map((lesson) => (
-                        <option key={lesson.id} value={lesson.id}>{lesson.title}</option>
+                        <option key={lesson.id} value={lesson.id}>{isChineseTr ? lesson.s_chn_title : lesson.eng_title}</option>
                       ))
                     }
                   </select>
