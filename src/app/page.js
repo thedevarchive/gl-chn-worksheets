@@ -141,11 +141,16 @@ export default function Home() {
       .catch((err) => console.error(err));
   };
 
-  //update 
+  //update end lesson when selecting new start lesson (selectedLesson)
   useEffect(() => {
-    if (endLesson < selectedLesson) setEndLesson(selectedLesson);
-    else if (lessons - 1 > 0) setEndLesson(Number(selectedLesson) + lessons - 1);
+    if (endLesson < selectedLesson && isAcaPerfWS) setEndLesson(selectedLesson);
+    else if (lessons - 1 > 0 && isAcaPerfWS) setEndLesson(Number(selectedLesson) + lessons - 1);
   }, [selectedLesson]);
+
+  //useEffect for resetting selected question types in regular worksheets
+  useEffect(() => {
+    setSelectedFormat("");
+  }, [isAcaPerfWS]);
 
   const handleAcademicPerformance = () => {
     fetch(`${API_URL}/academic-performance/${selectedLesson}`, {
@@ -156,7 +161,8 @@ export default function Home() {
       },
       body: JSON.stringify({
         end_lesson: endLesson, 
-        questions: String(questions)
+        questions: String(questions),
+        is_for_kids: String(isForKids),
       })
     })
       .then((res) => {
@@ -255,16 +261,16 @@ export default function Home() {
                   <h2 className="text-xl font-semibold mb-2">Select Number of Questions</h2>
                   <div className="flex gap-4">
                     <label className="flex items-center space-x-2">
-                      <input type="radio" name="questions" onChange={() => setQuestions(60)} className="accent-yellow-500" />
-                      <span>60</span>
+                      <input type="radio" name="questions" onChange={() => setQuestions(isForKids ? 40 : 60)} className="accent-yellow-500" />
+                      <span>{isForKids ? "40" : "60"}</span>
                     </label>
                     <label className="flex items-center space-x-2">
-                      <input type="radio" name="questions" onChange={() => setQuestions(70)} className="accent-yellow-500" />
-                      <span>70</span>
+                      <input type="radio" name="questions" onChange={() => setQuestions(isForKids ? 50 : 70)} className="accent-yellow-500" />
+                      <span>{isForKids ? "50" : "70"}</span>
                     </label>
                     <label className="flex items-center space-x-2">
-                      <input type="radio" name="questions" onChange={() => setQuestions(80)} className="accent-yellow-500" />
-                      <span>80</span>
+                      <input type="radio" name="questions" onChange={() => setQuestions(isForKids ? 60 : 80)} className="accent-yellow-500" />
+                      <span>{isForKids ? "60" : "80"}</span>
                     </label>
                   </div>
                 </section>
@@ -335,7 +341,7 @@ export default function Home() {
                     <h2 className="text-xl font-semibold mb-2">Select Question Types</h2>
                     <div className="flex flex-col justify-center gap-2">
                       <label className="flex items-center space-x-2">
-                        <input type="checkbox" name="qType" checked={getVisibleQTypes().every(type => qTypes[type])} onChange={handleSelectAllVisible} className="accent-yellow-500" />
+                        <input type="checkbox" name="qType" checked={getVisibleQTypes().length > 0 ? getVisibleQTypes().every(type => qTypes[type]) : false} onChange={handleSelectAllVisible} className="accent-yellow-500" />
                         <span>Select All</span>
                       </label>
                       <label className="flex items-center space-x-2">

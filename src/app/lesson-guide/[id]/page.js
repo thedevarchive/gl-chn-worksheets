@@ -101,7 +101,7 @@ export default function LessonGuideId() {
                         {
                             columns?.column2?.map((item, index) => (
                                 <div key={index}>
-                                    <div className="text-2xl">{columns.column1.length + index + 1}. <span className="font-bold">{isSimplified ? item.s_hanzi : item.t_hanzi}</span> {item.pinyin} - {item.meaning}</div>
+                                    <div className="text-2xl whitespace-normal">{columns.column1.length + index + 1}. <span className="font-bold">{isSimplified ? item.s_hanzi : item.t_hanzi}</span> {item.pinyin} - {item.meaning}</div>
                                 </div>
                             ))
                         }
@@ -112,8 +112,8 @@ export default function LessonGuideId() {
                 {
                     vocabNotes?.map((item, index) =>
                         <div key={index} className="flex flex-col my-4 gap-4 lg:min-w-4xl lg:max-w-4xl">
-                            <div className="flex p-10 rounded-2xl lg:min-w-4xl lg:max-w-4xl bg-violet-300 items-center text-2xl">
-                                <span className="font-bold mr-2">{isSimplified ? item.s_hanzi : item.t_hanzi}</span> {item.pinyin} - {item.meaning}
+                            <div className="p-10 rounded-2xl lg:min-w-4xl lg:max-w-4xl bg-violet-300 items-center text-2xl whitespace-normal leading-relaxed">
+                                <span className="font-bold mr-1">{isSimplified ? item.s_hanzi : item.t_hanzi}</span> {item.pinyin} - {item.meaning}
                             </div>
                             <div className="text-xl">
                                 {isSimplified ? item.eng_s_notes : item.eng_t_notes}
