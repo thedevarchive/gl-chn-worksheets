@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "@/app/contexts/LanguageContext";
 
 import Header from "./components/Header";
 import LanguageToggle from "./components/LanguageToggle";
@@ -16,8 +17,11 @@ export default function Home() {
   const [endLesson, setEndLesson] = useState("1");
   const [isForKids, setIsForKids] = useState(false);
   const [questions, setQuestions] = useState(0);
-  const [isChineseTr, setIsChineseTr] = useState(false); 
   //const [isSimplified, setIsSimplified] = useState(true); 
+
+  const [selectedFormat, setSelectedFormat] = useState("");
+
+  const { language } = useLanguage();
 
   //object state containing boolean values for question types 
   const [qTypes, setQTypes] = useState({
@@ -28,8 +32,6 @@ export default function Home() {
     idCorSen: false,
     reconSentence: false,
   });
-
-  const [selectedFormat, setSelectedFormat] = useState("");
 
   //function getting the question types that are visible depending on format selected
   const getVisibleQTypes = (format = selectedFormat) => {
@@ -197,7 +199,7 @@ export default function Home() {
       {/* Main Content */}
       <div className="flex flex-col items-center p-4 bg-violet-200 flex-1 w-full">
         <div className="flex justify-end w-full">
-          <LanguageToggle currentLang={isChineseTr} onToggle={() => setIsChineseTr(!isChineseTr)} />
+          <LanguageToggle />
         </div>
         <div className="flex flex-col items-center bg-white p-8 rounded-2xl shadow-md w-full max-w-md mt-12">
           <h1 className="text-2xl font-bold mb-4 text-center">Generate Worksheet</h1>
@@ -230,7 +232,7 @@ export default function Home() {
                   >
                     {
                       lessonArr.map((lesson) => (
-                        <option key={lesson.id} value={lesson.id}>{isChineseTr ? lesson.s_chn_title : lesson.eng_title}</option>
+                        <option key={lesson.id} value={lesson.id}>{language === "en" ? lesson.eng_title : lesson.s_chn_title }</option>
                       ))
                     }
                   </select>
@@ -256,9 +258,9 @@ export default function Home() {
 
                 <section className="flex flex-col items-center mb-4">
                   <h2 className="text-xl font-semibold mb-2">Preview Lesson Coverage</h2>
-                  <p className="text-lg mb-2">Lesson {lessonArr[Number(selectedLesson) - 1].id}: {isChineseTr ? lessonArr[Number(selectedLesson) - 1].s_chn_title : lessonArr[Number(selectedLesson) - 1].eng_title}</p>
+                  <p className="text-lg mb-2">Lesson {lessonArr[Number(selectedLesson) - 1].id}: {language === "en"  ? lessonArr[Number(selectedLesson) - 1].eng_title : lessonArr[Number(selectedLesson) - 1].s_chn_title}</p>
                   <p className="text-lg mb-2">to</p>
-                  <p className="text-lg mb-2">Lesson {lessonArr[Number(endLesson) - 1].id}: {isChineseTr ? lessonArr[Number(endLesson) - 1].s_chn_title : lessonArr[Number(endLesson) - 1].eng_title}</p>
+                  <p className="text-lg mb-2">Lesson {lessonArr[Number(endLesson) - 1].id}: {language === "en" ? lessonArr[Number(endLesson) - 1].eng_title : lessonArr[Number(endLesson) - 1].s_chn_title }</p>
                 </section>
 
                 {/* Number of questions */}
@@ -297,7 +299,7 @@ export default function Home() {
                   >
                     {
                       lessonArr.map((lesson) => (
-                        <option key={lesson.id} value={lesson.id}>{isChineseTr ? lesson.s_chn_title : lesson.eng_title}</option>
+                        <option key={lesson.id} value={lesson.id}>{language === "en" ? lesson.eng_title : lesson.s_chn_title }</option>
                       ))
                     }
                   </select>

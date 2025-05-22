@@ -14,6 +14,7 @@ const AnswerKey = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
 
+    const [id, setId] = useState(0); 
     const [title, setTitle] = useState(""); //name of the current lesson
 
     //check if learner is looking for an answer key written in simplified Chinese
@@ -25,7 +26,7 @@ const AnswerKey = () => {
     const [fitb, setFitb] = useState([]);
     const [trChn, setTrChn] = useState([]);
 
-    const lessonId = params.id;
+    const code = params.code;
     const scriptParam = searchParams.get('script');
 
     const script = scriptParam && scriptParam.trim() !== '' ? scriptParam : "simplified";
@@ -46,7 +47,7 @@ const AnswerKey = () => {
 
     //useEffect for calling API to load answer key details for a lesson
     useEffect(() => {
-        fetch(`${API_URL}/lessons/${lessonId}?script=${script}`, {
+        fetch(`${API_URL}/key/${code}?script=${script}`, {
             method: "GET",
             headers: {
                 "accept": "application/json",
@@ -56,7 +57,8 @@ const AnswerKey = () => {
             .then((res) => res.json())
             .then((data) => {
                 setIsSimplified(script !== "traditional");
-                setTitle(data.title);
+                setId(data.lesson.id)
+                setTitle(data.lesson.eng_title);
                 setChars(data.chars);
                 setVocab(data.vocab);
                 setFitb(data.fitb_questions);
@@ -74,7 +76,7 @@ const AnswerKey = () => {
         <main className="flex flex-col min-h-screen bg-gray-100 text-black">
             <Header isSimplified={isSimplified} />
             <div className="flex flex-col items-center p-4 bg-violet-200 flex-1">
-                <h1 className="text-3xl font-bold mt-6 mb-4 text-center">Lesson {lessonId}: {title}</h1>
+                <h1 className="text-3xl font-bold mt-6 mb-4 text-center">Lesson {id}: {title}</h1>
                 <h2 className="text-2xl font-semibold mb-6 text-center">Answer Key</h2>
 
                 <h3 className="text-2xl font-bold mb-6 text-center">Characters Learned</h3>

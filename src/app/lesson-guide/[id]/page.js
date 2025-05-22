@@ -2,18 +2,20 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useLanguage } from "@/app/contexts/LanguageContext";
 
 //prevents unnecessary XSS, just to be safe 
 import DOMPurify from 'dompurify';
 
 import Header from "../../components/Header";
+import LanguageToggle from "@/app/components/LanguageToggle";
 
 export default function LessonGuideId() {
     const params = useParams();
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    const [title, setTitle] = useState(""); //name of the current lesson
+    const [titles, setTitles] = useState([]); //name of the current lesson
     const [objectives, setObjectives] = useState([]);
 
     //check if learner is looking for an answer key written in simplified Chinese
@@ -30,6 +32,8 @@ export default function LessonGuideId() {
 
     //for displaying the vocabulary in two columns
     const [columns, setColumns] = useState({ column1: [], column2: [] });
+
+    const { language } = useLanguage();
 
     // Split the vocabulary into two columns
     const splitIntoColumns = (vocabList) => {
@@ -54,7 +58,7 @@ export default function LessonGuideId() {
             .then((res) => res.json())
             .then((data) => {
                 setIsSimplified(script !== "traditional");
-                setTitle(data.title);
+                setTitles([data.titles.eng_title, data.titles.s_chn_title]);
                 setObjectives(data.objectives);
                 setVocab(data.vocab);
                 setVocabNotes(data.vocabNotes);
@@ -73,7 +77,10 @@ export default function LessonGuideId() {
             {/* Header */}
             <Header isSimplified={isSimplified} />
             <div className="flex flex-col items-center p-4 bg-violet-200 flex-1">
-                <h1 className="text-3xl font-bold mt-6 mb-4 text-center">Lesson {lessonId}: {title}</h1>
+                <div className="flex justify-end w-full">
+                    <LanguageToggle />
+                </div>
+                <h1 className="text-3xl font-bold mt-6 mb-4 text-center">{language === "en" ? `Lesson ${lessonId}: ${titles[0]}` : `${titles[1]}`}</h1>
 
                 <h3 className="text-2xl font-bold text-center">Objectives</h3>
                 <div className="flex flex-col gap-4 m-4 p-10 rounded-2xl lg:min-w-4xl lg:max-w-4xl bg-violet-300 items-center">
