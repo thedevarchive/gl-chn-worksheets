@@ -57,7 +57,7 @@ Email me at amaengo@protonmail.com if you find any bugs in the program or have a
 
 這個項目獻給我對長輩的記憶。他們的善良、遺產和與中國文化的聯繫激發了這個工具的創作。願這項工作作為對你們故事的微小致敬，為他人帶來學習和喜悅。
 
-致以最深的敬意，
+致以最深的敬意， 
 
 龔語智 (thedevarchive)
 
