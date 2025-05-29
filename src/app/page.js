@@ -31,25 +31,28 @@ export default function Home() {
     translateChn: false,
     idCorSen: false,
     reconSentence: false,
+    simpleComp: false,
   });
 
   //function getting the question types that are visible depending on format selected
   const getVisibleQTypes = (format = selectedFormat) => {
-    const supportsIdCorSen = Number(selectedLesson) >= 4; // becomes available after lesson 4
-    const supportsReconSentence = Number(selectedLesson) >= 5; // becomes available after lesson 5
+    const supportsICS = Number(selectedLesson) >= 4; // becomes available after lesson 4
+    const supportsRS = Number(selectedLesson) >= 5; // becomes available after lesson 5
+    const supportsSC = Number(selectedLesson) >= 8; // becomes available after lesson 8
 
     const base = ["matchPinyin", "matchMeaning", "fillBlank"];
     const wrExtras = ["translateChn"];
-    const idCorSenOption = supportsIdCorSen ? ["idCorSen"] : []; //add identify correct sentence if selected lesson is 4 and above 
-    const reconSentenceOption = supportsReconSentence ? ["reconSentence"] : [];
+    const idCorSenOption = supportsICS ? ["idCorSen"] : []; //add identify correct sentence if selected lesson is 4 and above 
+    const reconSentenceOption = supportsRS ? ["reconSentence"] : [];
+    const simpleCompOption = supportsSC ? ["simpleComp"] : [];
 
     switch (format) {
       case "MC":
-        return [...base, ...idCorSenOption];
+        return [...base, ...idCorSenOption, ...simpleCompOption];
       case "WR":
         return [...base, ...wrExtras, ...reconSentenceOption];
       case "MW":
-        return [...base, ...wrExtras, ...idCorSenOption, ...reconSentenceOption];
+        return [...base, ...wrExtras, ...idCorSenOption, ...reconSentenceOption, ...simpleCompOption];
       default:
         return [];
     }
@@ -120,6 +123,7 @@ export default function Home() {
         translate_chn: String(qTypes.translateChn),
         ics: String(qTypes.idCorSen),
         recon_sentence: String(qTypes.reconSentence),
+        simple_comp: String(qTypes.simpleComp),
         question_format: selectedFormat
       }),
     })
@@ -383,6 +387,13 @@ export default function Home() {
                         <label className="flex items-center space-x-2">
                           <input type="checkbox" name="qType" checked={qTypes.reconSentence} onChange={() => setQTypes(prev => ({ ...prev, reconSentence: !prev.reconSentence }))} className="accent-yellow-500" />
                           <span>Reconstruct Sentence</span>
+                        </label>
+                      }
+                      {
+                        selectedLesson >= 8 && selectedFormat !== "WR" &&
+                        <label className="flex items-center space-x-2">
+                          <input type="checkbox" name="qType" checked={qTypes.simpleComp} onChange={() => setQTypes(prev => ({ ...prev, simpleComp: !prev.simpleComp }))} className="accent-yellow-500" />
+                          <span>Simple Comprehension</span>
                         </label>
                       }
                     </div>
