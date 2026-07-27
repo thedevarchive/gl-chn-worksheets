@@ -10,13 +10,13 @@ import LanguageToggle from "./components/LanguageToggle";
 export default function Home() {
   const router = useRouter(); // Initialise useRouter
 
-  const [lessonArr, setLessonArr] = useState([]);
+  const [lessonArr, setLessonArr] = useState([]); //state for available lessons
   const [selectedLesson, setSelectedLesson] = useState("1");
-  const [isAcaPerfWS, setIsAcaPerfWS] = useState(false);
+  const [isAcaPerfWS, setIsAcaPerfWS] = useState(false); //state that determines if user selected academic performance
   const [lessons, setLessons] = useState(0);
   const [endLesson, setEndLesson] = useState("1");
-  const [isForKids, setIsForKids] = useState(false);
-  const [questions, setQuestions] = useState(0);
+  const [isForKids, setIsForKids] = useState(false); //state that checks if user toggled Junior Worksheets mode
+  const [questions, setQuestions] = useState(0); 
   //const [isSimplified, setIsSimplified] = useState(true); 
 
   const [selectedFormat, setSelectedFormat] = useState("");
@@ -71,6 +71,7 @@ export default function Home() {
     setQTypes(updated);
   };
 
+  //handles what items will be shown when user changes the format 
   const handleFormatChange = (format) => {
     setSelectedFormat(format);
 
@@ -85,6 +86,7 @@ export default function Home() {
 
   const API_URL = "http://localhost:9080";
 
+  //API call for getting list of lessons available so far 
   useEffect(() => {
     fetch(`${API_URL}/lessons`, {
       method: "GET",
@@ -98,15 +100,8 @@ export default function Home() {
       .catch((err) => console.error(err));
   }, [router]);
 
+  //API call for generating worksheets 
   const handleGenerate = () => {
-    console.log("Selected level:", selectedLesson);
-    console.log("For Kids?", isForKids);
-    console.log("Number of questions:", questions);
-    console.log("Match Pinyin?", qTypes.matchPinyin);
-    console.log("Match Meaning?", qTypes.matchMeaning);
-    console.log("FITB?", qTypes.fillBlank);
-    console.log("TL Chinese?", qTypes.translateChn);
-    console.log("Selected Format:", selectedFormat);
 
     fetch(`${API_URL}/worksheets/${selectedLesson}`, {
       method: "POST",
@@ -160,6 +155,7 @@ export default function Home() {
     setSelectedFormat("");
   }, [isAcaPerfWS]);
 
+  //API call for generating academic performance worksheet 
   const handleAcademicPerformance = () => {
     fetch(`${API_URL}/academic-performance/${selectedLesson}`, {
       method: "POST",
