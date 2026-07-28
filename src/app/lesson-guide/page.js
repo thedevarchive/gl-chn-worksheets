@@ -48,6 +48,7 @@ export default function LessonGuide() {
                 </div>
                 <div className="text-4xl font-bold">Select Lesson</div>
                 <div className="text-2xl font-bold mt-6">Beginner Level</div>
+                {/* Show list of lessons available, layout will be changed in the future */}
                 <div className="flex flex-wrap mt-4 pb-8">
                     {
                         lessonArr?.map((lesson) => (
