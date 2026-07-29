@@ -22,7 +22,7 @@ export default function LessonGuideId() {
     const [isSimplified, setIsSimplified] = useState(true);
 
     const [vocab, setVocab] = useState([]);
-    const [vocabNotes, setVocabNotes] = useState([]);
+    const [vocabNotes, setVocabNotes] = useState([]); //stores list of vocab notes to display; some vocabulary require some explanation
     const [sampleSentences, setSampleSentences] = useState([]);
 
     const lessonId = params.id;
@@ -82,6 +82,7 @@ export default function LessonGuideId() {
                 </div>
                 <h1 className="text-3xl font-bold mt-6 mb-4 text-center">{language === "en" ? `Lesson ${lessonId}: ${titles[0]}` : `${titles[1]}`}</h1>
 
+                {/* Display lesson objectives to user */}
                 <h3 className="text-2xl font-bold text-center">Objectives</h3>
                 <div className="flex flex-col gap-4 m-4 p-10 rounded-2xl lg:min-w-4xl lg:max-w-4xl bg-violet-300 items-center">
                     <ul className="list-disc list-inside flex flex-col gap-4 text-xl">
@@ -93,6 +94,7 @@ export default function LessonGuideId() {
                     </ul>
                 </div>
 
+                {/* Vocabulary list in 2 columns just like in the textbooks i had */}
                 <h3 className="text-2xl font-bold text-center">Vocabulary</h3>
                 <div className="flex flex-col gap-y-4 md:items-center lg:items-stretch py-8 lg:p-8 md:gap-8 lg:flex-row lg:gap-30">
                     <div className="flex flex-col gap-4 p-10 rounded-2xl w-90 lg:min-w-sm lg:max-w-sm bg-violet-300">
@@ -115,6 +117,7 @@ export default function LessonGuideId() {
                     </div>
                 </div>
 
+                {/* Notes on some of the vocabulary */}
                 <h3 className="text-2xl font-bold text-center">Vocabulary Notes</h3>
                 {
                     vocabNotes?.map((item, index) =>
@@ -129,6 +132,7 @@ export default function LessonGuideId() {
                     )
                 }
 
+                {/* Vocabulary used in sentences, user learns sentence structure as well */}
                 <h3 className="text-2xl font-bold text-center">Sample Sentences</h3>
                 {
                     sampleSentences?.map((item, index) =>
